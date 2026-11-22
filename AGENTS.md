@@ -4,12 +4,12 @@
 
 ## Read before you edit
 
-| When the change touches                        | Read                                                                        |
-| ---------------------------------------------- | --------------------------------------------------------------------------- |
+| When the change touches                        | Read                                                                      |
+| ---------------------------------------------- | ------------------------------------------------------------------------- |
 | CI or a workflow                               | [devkit's CI guide](https://github.com/hakulab/devkit/blob/v3/docs/ci.md) |
-| A store module or an assistant's on-disk state | [Assistant stores](docs/reference/stores.md)                                |
-| Move, transfer, retirement, or backup behavior | [Design](docs/reference/design.md)                                          |
-| A release                                      | [RELEASING.md](RELEASING.md)                                                |
+| A store module or an assistant's on-disk state | [Assistant stores](docs/reference/stores.md)                              |
+| Move, transfer, retirement, or backup behavior | [Design](docs/reference/design.md)                                        |
+| A release                                      | [RELEASING.md](RELEASING.md)                                              |
 
 ## Code
 

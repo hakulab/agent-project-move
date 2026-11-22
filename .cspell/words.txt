@@ -9,6 +9,7 @@ direnv
 findutils
 gnubin
 hakula
+hakulab
 libexec
 mktemp
 musl
