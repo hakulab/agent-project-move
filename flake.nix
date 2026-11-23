@@ -56,7 +56,7 @@
           runtimeInputs = runtimeInputs pkgs;
           meta = {
             description = "Move, transfer, and retire coding agent sessions";
-            homepage = "https://github.com/hakula139/agent-project-move";
+            homepage = "https://github.com/hakulab/agent-project-move";
             license = lib.licenses.mit;
             platforms = lib.platforms.all;
           };

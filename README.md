@@ -1,6 +1,6 @@
 # agent-project-move
 
-[![CI](https://github.com/hakula139/agent-project-move/actions/workflows/ci.yml/badge.svg)](https://github.com/hakula139/agent-project-move/actions/workflows/ci.yml)
+[![CI](https://github.com/hakulab/agent-project-move/actions/workflows/ci.yml/badge.svg)](https://github.com/hakulab/agent-project-move/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Repair the project paths recorded by [Claude Code](https://claude.com/claude-code), [Codex](https://openai.com/codex/), and [OMP](https://omp.sh) after a directory moves, transfer sessions between hosts, and retire selected session copies.
@@ -14,16 +14,16 @@ Choose a plugin, a standalone [Agent Skill](https://agentskills.io), or the Nix 
 ### Claude Code plugin
 
 ```bash
-claude plugin marketplace add hakula139/agent-project-move
+claude plugin marketplace add hakulab/agent-project-move
 claude plugin install agent-project-move@agent-project-move
 ```
 
-Pin a release with `hakula139/agent-project-move#vX.Y.Z`.
+Pin a release with `hakulab/agent-project-move#vX.Y.Z`.
 
 ### Codex plugin
 
 ```bash
-codex plugin marketplace add hakula139/agent-project-move
+codex plugin marketplace add hakulab/agent-project-move
 codex plugin add agent-project-move@agent-project-move
 ```
 
@@ -34,7 +34,7 @@ Pin a release with `--ref vX.Y.Z` on `marketplace add`.
 For standalone skill installation, clone the repository and link its skill directory:
 
 ```bash
-git clone https://github.com/hakula139/agent-project-move ~/.local/share/agent-project-move
+git clone https://github.com/hakulab/agent-project-move ~/.local/share/agent-project-move
 skill_dir=~/.local/share/agent-project-move/skills/agent-project-move
 mkdir -p ~/.agents/skills ~/.claude/skills
 ln -s "$skill_dir" ~/.agents/skills/agent-project-move
@@ -50,21 +50,21 @@ Link the whole skill directory because Codex skips a `SKILL.md` that is itself a
 
 Alternatively, use a skill installer:
 
-- `npx skills add hakula139/agent-project-move -g` installs it into `~/.agents/skills` and links it for Claude Code.
-- Codex's `$skill-installer` takes `--repo hakula139/agent-project-move --path skills/agent-project-move`.
+- `npx skills add hakulab/agent-project-move -g` installs it into `~/.agents/skills` and links it for Claude Code.
+- Codex's `$skill-installer` takes `--repo hakulab/agent-project-move --path skills/agent-project-move`.
 
 ### Nix
 
 Run it without installing:
 
 ```bash
-nix run github:hakula139/agent-project-move -- scan
+nix run github:hakulab/agent-project-move -- scan
 ```
 
 Or install it into your profile:
 
 ```bash
-nix profile install github:hakula139/agent-project-move
+nix profile install github:hakulab/agent-project-move
 ```
 
 The package includes runtime tools for `aarch64-darwin`, `aarch64-linux`, and `x86_64-linux` and requires Nix flakes.
@@ -72,7 +72,7 @@ The package includes runtime tools for `aarch64-darwin`, `aarch64-linux`, and `x
 Home Manager users add the flake input and import the module:
 
 ```nix
-inputs.agent-project-move.url = "github:hakula139/agent-project-move";
+inputs.agent-project-move.url = "github:hakulab/agent-project-move";
 
 # In the Home Manager configuration
 imports = [ inputs.agent-project-move.homeModules.default ];
