@@ -3,6 +3,6 @@
   "version": "0.5.0",
   "description": "Move, transfer, and retire coding agent sessions",
   "author": { "name": "Hakula", "url": "https://hakula.xyz" },
-  "repository": "https://github.com/hakula139/agent-project-move",
+  "repository": "https://github.com/hakulab/agent-project-move",
   "license": "MIT"
 }
