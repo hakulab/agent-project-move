@@ -3,7 +3,7 @@
 # ==================================================================================================
 # Agent Project Move
 # ==================================================================================================
-# Repairs project paths and transfers or retires Claude Code, Codex, and OMP session state.
+# Repairs paths and transfers or retires Antigravity CLI, Claude Code, Codex, and OMP sessions.
 # Paths match case-sensitively. Run with --help for usage.
 # ==================================================================================================
 

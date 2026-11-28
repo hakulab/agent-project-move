@@ -41,6 +41,7 @@
           coreutils
           diffutils
           findutils
+          python3
           ripgrep
           sqlite
           zstd
@@ -48,7 +49,7 @@
 
       mkAgentProjectMove =
         pkgs:
-        (devkit.lib.mkLib pkgs).mkNuApplication {
+        ((devkit.lib.mkLib pkgs).mkNuApplication {
           pname = "agent-project-move";
           inherit (lib.importJSON ./.claude-plugin/plugin.json) version;
           src = ./skills/agent-project-move/scripts;
@@ -60,7 +61,13 @@
             license = lib.licenses.mit;
             platforms = lib.platforms.all;
           };
-        };
+        }).overrideAttrs
+          (previous: {
+            buildCommand = previous.buildCommand + ''
+              cp -P "$out/share/skills/agent-project-move/scripts/stores/"agy_*.py \
+                "$out/share/agent-project-move/stores/"
+            '';
+          });
 
       platformKey = p: {
         inherit (p) config isStatic;

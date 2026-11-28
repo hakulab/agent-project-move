@@ -53,6 +53,23 @@ export def copy-action [
   }
 }
 
+# Prepare a binary replacement in a private file beside its destination.
+export def prepared-file-action [
+  assistant: string
+  store: string
+  path: string
+  description: string
+  prepare: closure
+  --to: string
+]: nothing -> record {
+  let base = if $to == null {
+    action $assistant $store "edit" $path $description
+  } else {
+    copy-action $assistant $store $path $to $description
+  }
+  $base | merge {prepare: $prepare}
+}
+
 def rename-action [
   assistant: string
   store: string
@@ -411,7 +428,35 @@ def edit-file [path: string, transform: closure]: nothing -> nothing {
   write-file $path $updated --compress=$compress
 }
 
+def prepare-file [action: record, prepare: closure]: nothing -> nothing {
+  let target = ($action | get -o to | default $action.path)
+  mkdir ($target | path dirname)
+  let temporary = (^mktemp $"($target).tmp.XXXXXXXXXX" | str trim)
+  try {
+    do $prepare $temporary
+    if $action.op == "edit" {
+      let mode = (^stat -c "%a" $target | str trim)
+      ^chmod $mode $temporary
+      ^touch -r $target $temporary
+      mv --force $temporary $target
+    } else {
+      if $action.path != $target { ^touch -r $action.path $temporary }
+      ^ln -T $temporary $target
+      rm --force $temporary
+    }
+  } catch {|error|
+    rm --force $temporary
+    error make $error
+  }
+}
+
 def execute-action [action: record]: nothing -> nothing {
+  let prepare = ($action | get -o prepare)
+  if $prepare != null {
+    prepare-file $action $prepare
+    return
+  }
+
   match $action.op {
     "rename" => {
       mkdir ($action.to | path dirname)

@@ -1,6 +1,6 @@
 # AGENTS.md: agent-project-move
 
-`agent-project-move` is a Nushell command and an agent skill that repair the project paths recorded by Claude Code, Codex, and OMP after a directory moves, transfer sessions between hosts, and retire selected session copies.
+`agent-project-move` is a Nushell command and an agent skill that repair recorded project paths after a directory moves, transfer sessions between hosts, and retire selected session copies. See [Assistant stores](docs/reference/stores.md) for the supported assistants.
 
 ## Read before you edit
 

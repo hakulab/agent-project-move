@@ -1,3 +1,4 @@
+autocheckpoint
 cachix
 codepoint
 coreutils
@@ -7,9 +8,12 @@ dflt
 diffutils
 direnv
 findutils
+fromhex
 gnubin
 hakula
 hakulab
+iterdump
+jetbox
 libexec
 mktemp
 musl
@@ -18,6 +22,7 @@ nixos
 nixpkgs
 notnull
 nuon
+pbtxt
 pcre
 pkgs
 pname
@@ -30,7 +35,9 @@ snapcompact
 stdenv
 substituters
 testlib
+uncheckpointed
 unspanned
+varint
 WebP
 worktree
 zstd

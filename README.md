@@ -3,7 +3,7 @@
 [![CI](https://github.com/hakulab/agent-project-move/actions/workflows/ci.yml/badge.svg)](https://github.com/hakulab/agent-project-move/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Repair the project paths recorded by [Claude Code](https://claude.com/claude-code), [Codex](https://openai.com/codex/), and [OMP](https://omp.sh) after a directory moves, transfer sessions between hosts, and retire selected session copies.
+Repair the project paths recorded by [Antigravity CLI](https://antigravity.google/docs/cli/conversations), [Claude Code](https://claude.com/claude-code), [Codex](https://openai.com/codex/), and [OMP](https://omp.sh) after a directory moves, transfer sessions between hosts, and retire selected session copies.
 
 Preview changes before applying them with `--apply`. Export leaves the source store unchanged.
 
@@ -36,15 +36,17 @@ For standalone skill installation, clone the repository and link its skill direc
 ```bash
 git clone https://github.com/hakulab/agent-project-move ~/.local/share/agent-project-move
 skill_dir=~/.local/share/agent-project-move/skills/agent-project-move
-mkdir -p ~/.agents/skills ~/.claude/skills
+mkdir -p ~/.agents/skills ~/.claude/skills ~/.gemini/config/skills
 ln -s "$skill_dir" ~/.agents/skills/agent-project-move
 ln -s "$skill_dir" ~/.claude/skills/agent-project-move
+ln -s "$skill_dir" ~/.gemini/config/skills/agent-project-move
 ```
 
 | Directory                                                   | Read by          |
 | ----------------------------------------------------------- | ---------------- |
 | `~/.agents/skills`                                          | Codex, OMP       |
 | `~/.claude/skills`, or `$CLAUDE_CONFIG_DIR/skills` when set | Claude Code, OMP |
+| `~/.gemini/config/skills`                                   | Antigravity CLI  |
 
 Link the whole skill directory because Codex skips a `SKILL.md` that is itself a symlink. `git pull` updates the clone, and `git checkout vX.Y.Z` pins a release.
 
@@ -80,17 +82,18 @@ imports = [ inputs.agent-project-move.homeModules.default ];
 programs.agent-project-move.enable = true;
 ```
 
-The module installs the command and links the skill into `~/.agents/skills` and `~/.claude/skills`. Set `programs.agent-project-move.skillDirectories` to change the list, or use `overlays.default` to install the package through an overlay.
+The module installs the command and links the skill into `~/.agents/skills` and `~/.claude/skills`. To also install it for Antigravity CLI, set `programs.agent-project-move.skillDirectories` to `[ ".agents/skills" ".claude/skills" ".gemini/config/skills" ]`. The package is also available through `overlays.default`.
 
 ## Agent skill
 
 Start a new assistant session after installation, or run `/reload-plugins` in OMP.
 
-| Assistant   | Explicit invocation                              |
-| ----------- | ------------------------------------------------ |
-| Claude Code | `/agent-project-move`                            |
-| Codex       | `$agent-project-move`, or pick it from `/skills` |
-| OMP         | `/skill:agent-project-move`                      |
+| Assistant       | Explicit invocation                              |
+| --------------- | ------------------------------------------------ |
+| Antigravity CLI | `/agent-project-move`                            |
+| Claude Code     | `/agent-project-move`                            |
+| Codex           | `$agent-project-move`, or pick it from `/skills` |
+| OMP             | `/skill:agent-project-move`                      |
 
 ## Usage
 
@@ -102,19 +105,18 @@ agent-project-move move ~/src/app ~/work/app
 agent-project-move move ~/src/app ~/work/app --apply
 ```
 
-Use `-a claude,codex` to select assistants, or omit it for all three. The [skill procedures](skills/agent-project-move/SKILL.md) cover path ordering, [cross-host transfers](skills/agent-project-move/SKILL.md#transfer-between-hosts), [selected source retirement](skills/agent-project-move/SKILL.md#retire), and verification. `agent-project-move --help` lists the commands and options.
+Use `-a agy` for Antigravity CLI or a comma-separated list such as `-a claude,codex` for multiple assistants. The default includes all supported assistants. The [skill procedures](skills/agent-project-move/SKILL.md) cover path ordering, [cross-host transfers](skills/agent-project-move/SKILL.md#transfer-between-hosts), [selected source retirement](skills/agent-project-move/SKILL.md#retire), and verification. `agent-project-move --help` lists the commands and options.
 
 Before applying, close affected assistant sessions, including your own. Keep the default recovery backups until migrated sessions resume successfully. See [concurrency and recovery](skills/agent-project-move/SKILL.md#concurrent-sessions).
 
 ## Tested with
 
-Tested on Linux against:
-
-| Assistant   | Tested  |
-| ----------- | ------- |
-| Claude Code | 2.1.312 |
-| Codex       | 0.165.0 |
-| OMP         | 18.13.2 |
+| Assistant       | Version | Platform |
+| --------------- | ------- | -------- |
+| Antigravity CLI | 1.5.18  | macOS    |
+| Claude Code     | 2.1.312 | Linux    |
+| Codex           | 0.165.0 | Linux    |
+| OMP             | 18.13.2 | Linux    |
 
 New assistant storage formats may leave paths unchanged. If sessions remain under the old path, open an issue with this tool's release tag or commit and the assistant version.
 

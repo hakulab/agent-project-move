@@ -1,8 +1,8 @@
 ---
 name: agent-project-move
 description: >-
-  Repair the project paths recorded by Claude Code, Codex, and OMP after a directory moves,
-  transfer sessions between hosts, and retire selected session copies. Use when a project was
+  Repair project paths in Antigravity CLI (agy), Claude Code, Codex, and OMP after a directory
+  moves, transfer sessions between hosts, and retire selected session copies. Use when a project was
   moved or renamed and an assistant no longer lists its sessions under the new path, when memory
   or history still points at an old path, when a removed worktree leaves sessions stranded, when
   deleted directories leave stale state, or when moving work to another machine.
@@ -16,7 +16,7 @@ Planning is read-only. `move`, `import`, and `retire` write only with `--apply`,
 
 Resolve `agent-project-move` to an absolute command, or use `nu --no-config-file <skill directory>/scripts/agent-project-move.nu` with the script's absolute path when absent. Preserve the working directory for relative arguments. Give the user the same absolute command, because their terminal's `PATH` may differ.
 
-Nix provides the runtime tools. Otherwise check for Nushell 0.116 or later, SQLite 3.33 or later, ripgrep with PCRE2, zstd, POSIX `find` and `cmp`, `xargs` with `-0` support, and GNU coreutils. On macOS the command looks for Homebrew's coreutils if GNU `stat` is missing from `PATH`. Native Windows is unsupported.
+Nix provides the runtime tools. Otherwise check for Nushell 0.116 or later, SQLite 3.33 or later, ripgrep with PCRE2, zstd, POSIX `find` and `cmp`, `xargs` with `-0` support, and GNU coreutils. Antigravity CLI stores also require `python3` (3.10 or later) with its standard library. On macOS the command looks for Homebrew's coreutils if GNU `stat` is missing from `PATH`. Native Windows is unsupported.
 
 ## Survey
 
@@ -40,7 +40,7 @@ Move the project directory first, then preview `move <old> <new>` and apply with
 
 Paths match case-sensitively at `<old>` or `<old>/`. Case-only moves are refused. A missing destination draws a warning because sessions need it to resume. When a child moves outside its parent's destination, repair the child's mapping before the parent's.
 
-With `--exact` or `--session-ids`, the move rewrites the selected transcripts and moves their artifacts when the owning project is under `<old>`. Shared project state stays in place.
+With `--exact` or `--session-ids`, the move updates the selected sessions and relocates artifacts stored by project path when the owning project is under `<old>`. Shared project state stays in place.
 
 ## Transfer between hosts
 
@@ -69,4 +69,4 @@ Use the directory printed after `Backed up to`. It mirrors absolute paths and co
 
 ## Verify
 
-Check `scan`, then open the destination project and resume affected sessions in each assistant. Check transferred artifacts, including OMP blob resolution. Keep backups until a new session opens the migrated project successfully.
+Check `scan`, then open the destination project and resume affected sessions in each assistant. In Antigravity CLI, use `/resume` to find a conversation or `agy --conversation <id>` to reopen it by ID. Check transferred artifacts, including OMP blob resolution. Keep backups until a new session opens the migrated project successfully.

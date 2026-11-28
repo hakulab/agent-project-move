@@ -2,6 +2,16 @@
 
 See [Tested with](../../README.md#tested-with) for checked assistant versions, [Design](design.md) for shared constraints, and the [skill](../../skills/agent-project-move/SKILL.md) for procedures and selection rules.
 
+## Antigravity CLI
+
+The `agy` adapter reads the standalone CLI store in `~/.gemini/antigravity-cli`. Each conversation has a SQLite database at `conversations/<id>.db`. Its primary workspace determines the cwd shown by `scan` and used for export, retirement, and selected moves. Selection includes subagent descendants across workspaces. Forks are independent conversations.
+
+A default move updates matching workspace and Git root URIs across all conversations, including those that reference the moved directory through `--add-dir`. Moves also update the corresponding summaries in `conversation_summaries.db` and the picker cache. The workspace keys in `cache/last_conversations.json` determine what `agy -c` resumes. When two keys map to the same workspace, the destination's existing selection takes precedence. Historical steps and artifact contents retain their original paths.
+
+Export takes a SQLite snapshot of each selected conversation and carries its summaries, continue pointers, files under `brain/<id>/`, and `annotations/<id>.pbtxt` when present. Import checks existing conversation databases for matching schema and content after path mapping. Retirement removes the selected databases, their artifacts and annotations, and their entries in the summaries and caches.
+
+Conversations retain their project IDs across hosts. Manage named project definitions in `~/.gemini/config/projects/<id>.json` separately. To resume an imported conversation by ID, use `agy --conversation <id>` in the destination workspace.
+
 ## Claude Code
 
 Root: `$CLAUDE_CONFIG_DIR`, defaulting to `~/.claude`. Project keys in `$CLAUDE_CONFIG_DIR/.claude.json`, or `~/.claude.json` when the variable is unset, help resolve physical project ownership and are only read.

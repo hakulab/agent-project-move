@@ -4,7 +4,10 @@
 
 use ./paths.nu [max-mtime path-match valid-path]
 
-export def scan-sessions [assistant: string]: list<record> -> list<record> {
+export def scan-sessions [
+  assistant: string
+  --recorded-time # Use the last_used datetime supplied for every row
+]: list<record> -> list<record> {
   $in
   | where {|row| valid-path $row.cwd }
   | group-by cwd
@@ -15,7 +18,7 @@ export def scan-sessions [assistant: string]: list<record> -> list<record> {
       assistant: $assistant
       path: $group.cwd
       sessions: ($files | length)
-      last_used: (max-mtime $files)
+      last_used: (if $recorded_time { $group.items.last_used | math max } else { max-mtime $files })
     }
   }
   | sort-by path

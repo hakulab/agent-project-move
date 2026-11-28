@@ -4,11 +4,12 @@
 # Per-assistant dispatch and shared argument parsing.
 # ==================================================================================================
 
+use ./stores/agy.nu
 use ./stores/claude.nu
 use ./stores/codex.nu
 use ./stores/omp.nu
 
-const ASSISTANTS = ["claude" "codex" "omp"]
+const ASSISTANTS = ["agy" "claude" "codex" "omp"]
 export const ALL_ASSISTANTS = ($ASSISTANTS | str join ",")
 
 export def parse-assistants [value: string]: nothing -> list<string> {
@@ -40,6 +41,7 @@ export def scan-all [selected: list<string>]: nothing -> list<record> {
   $selected
   | each {|assistant|
     match $assistant {
+      "agy" => { agy scan }
       "claude" => { claude scan }
       "codex" => { codex scan }
       "omp" => { omp scan }
@@ -58,6 +60,7 @@ export def plan-move [
   $selected
   | each {|assistant|
     match $assistant {
+      "agy" => { agy plan-move $old $new --exact=$exact --session-ids $session_ids }
       "claude" => { claude plan-move $old $new --exact=$exact --session-ids $session_ids }
       "codex" => { codex plan-move $old $new --exact=$exact --session-ids $session_ids }
       "omp" => { omp plan-move $old $new --exact=$exact --session-ids $session_ids }
@@ -73,6 +76,7 @@ export def assistant-export-bundle [
   --session-ids: list<string> = []
 ]: nothing -> record {
   match $assistant {
+    "agy" => { agy export-bundle $old --exact=$exact --session-ids $session_ids }
     "claude" => { claude export-bundle $old --exact=$exact --session-ids $session_ids }
     "codex" => { codex export-bundle $old --exact=$exact --session-ids $session_ids }
     "omp" => { omp export-bundle $old --exact=$exact --session-ids $session_ids }
@@ -85,6 +89,7 @@ export def assistant-plan-import [
   --target: string
 ]: nothing -> list<record> {
   match $assistant {
+    "agy" => { agy plan-import $bundle --target $target }
     "claude" => { claude plan-import $bundle --target $target }
     "codex" => { codex plan-import $bundle --target $target }
     "omp" => { omp plan-import $bundle --target $target }
@@ -100,6 +105,7 @@ export def plan-retire [
   $selected
   | each {|assistant|
     match $assistant {
+      "agy" => { agy plan-retire $path --exact=$exact --session-ids $session_ids }
       "claude" => { claude plan-retire $path --exact=$exact --session-ids $session_ids }
       "codex" => { codex plan-retire $path --exact=$exact --session-ids $session_ids }
       "omp" => { omp plan-retire $path --exact=$exact --session-ids $session_ids }

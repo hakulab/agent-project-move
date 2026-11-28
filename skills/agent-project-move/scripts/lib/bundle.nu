@@ -41,11 +41,17 @@ export def write-bundle [directory: string, bundle: record]: nothing -> nothing 
       let relative = ("files" | path join $name)
       let target = ($base | path join $relative)
 
-      ^cp --preserve=timestamps $file.source $target
+      let prepare = ($file | get -o prepare)
+      if $prepare != null {
+        do $prepare $target
+        ^touch -r $file.source $target
+      } else {
+        ^cp --preserve=timestamps $file.source $target
+      }
       ^chmod 600 $target
 
       $file
-      | reject source
+      | reject -o source prepare
       | upsert bundle $relative
     }
   )
